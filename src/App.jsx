@@ -1,68 +1,62 @@
 import React, { useState } from "react";
 import "./styles.css";
-import { InputTodo } from "./components/InputTodo";
-import { IncompleteTodos } from "./components/IncompleteTodos";
-import { CompleteTodos } from "./components/CompleteTodos";
 
 export const App = () => {
-  const [todoText, setTodoText] = useState("");
-  const [incompleteTodos, setIncompleteTodos] = useState([]);
-  const [completeTodos, setCompleteTodos] = useState([]);
+  const [todoTxt, setTodoTxt] = useState("");
+  const [inCompleteList, setInCompleteList] = useState(["aaa", "bbb", "ddd"]);
+  const [completeList, setCompleteList] = useState(['eee']);
 
-  const onChangeTodoText = (event) => setTodoText(event.target.value);
-
-  const onClickAdd = () => {
-    if (todoText === "") return;
-    const newTodos = [...incompleteTodos, todoText];
-    setIncompleteTodos(newTodos);
-    setTodoText("");
+  const inputTodo = () => {
+    if (todoTxt === "") return;
+    setTodoTxt(todoTxt);
+    const newTodos = [...inCompleteList, todoTxt];
+    setInCompleteList(newTodos);
+    setTodoTxt("");
   };
 
-  const onClickDelete = (index) => {
-    const newTodos = [...incompleteTodos];
-    newTodos.splice(index, 1);
-    setIncompleteTodos(newTodos);
+  const completeTodo = () => {
+    const newIn
   };
-
-  const onClickComplete = (index) => {
-    const newIncompleteTodos = [...incompleteTodos];
-    newIncompleteTodos.splice(index, 1);
-
-    const newCompleteTodos = [...completeTodos, incompleteTodos[index]];
-    setIncompleteTodos(newIncompleteTodos);
-    setCompleteTodos(newCompleteTodos);
-  };
-
-  const onClickBack = (index) => {
-    const newCompleteTodos = [...completeTodos];
-    newCompleteTodos.splice(index, 1);
-
-    const newIncompleteTodos = [...incompleteTodos, completeTodos[index]];
-    setCompleteTodos(newCompleteTodos);
-    setIncompleteTodos(newIncompleteTodos);
-  };
+  
 
   return (
     <>
-      <InputTodo
-        todoText={todoText}
-        onChange={onChangeTodoText}
-        onClick={onClickAdd}
-        disabled={incompleteTodos.length >= 5}
-      />
-
-      {incompleteTodos.length >= 5 && (
-        <p style={{ color: "red" }}>
-          登録できる todo ５個までです。消化してください！
-        </p>
-      )}
-
-      <IncompleteTodos
-        todos={incompleteTodos}
-        onClickComplete={onClickComplete}
-        onClickDelete={onClickDelete}
-      />
-      <CompleteTodos todos={completeTodos} onClickBack={onClickBack} />
+      <div className="input-area">
+        <input
+          id="add-text"
+          placeholder="TODOを入力"
+          value={todoTxt}
+          onChange={(event) => setTodoTxt(event.target.value)}
+        />
+        <button id="add-button" onClick={inputTodo}>
+          追加
+        </button>
+      </div>
+      <div className="imcomplete-area">
+        <p className="title">未完了のTODO</p>
+        <div>
+          <ul id="incomplete-list">
+            {inCompleteList.map((todo) => {
+              return (
+                <li key={todo} className="list-row">
+                  <p>{todo}</p>
+                  <button>完了</button>
+                  <button>削除</button>
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+      </div>
+      <div className="complete-area">
+        <p className="title">完了したTODO</p>
+        <ul id="complete-list">
+          <li className="list-row">
+            <p>test</p>
+            <button>戻す</button>
+          </li>
+        </ul>
+      </div>
     </>
   );
 };
